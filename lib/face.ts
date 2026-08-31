@@ -20,7 +20,7 @@ import {
 const FACE_DESCRIPTOR_LENGTH = 1024;
 const CHALLENGE_AGE_MS = 2 * 60 * 1000;
 const MIN_LIVENESS_SCORE = 0.5;
-export const FACE_MATCH_THRESHOLD = 0.40;
+export const FACE_MATCH_THRESHOLD = 0.08;
 
 type ChallengePayload = {
   mode: FaceChallengeMode;
@@ -185,15 +185,13 @@ export function decryptFaceDescriptor(value: string) {
 
 export function faceSimilarity(first: number[], second: number[]) {
   if (first.length !== second.length || first.length !== FACE_DESCRIPTOR_LENGTH) return 0;
-  let dotProduct = 0;
-  let normA = 0;
-  let normB = 0;
+  let sum = 0;
   for (let index = 0; index < first.length; index += 1) {
-    dotProduct += first[index] * second[index];
-    normA += first[index] * first[index];
-    normB += second[index] * second[index];
+    const difference = first[index] - second[index];
+    sum += difference * difference;
   }
-  if (normA === 0 || normB === 0) return 0;
-  const similarity = dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
-  return Math.round(100 * Math.max(similarity, 0)) / 100;
+  const distance = Math.round(100 * 25 * sum) / 100;
+  if (distance === 0) return 1;
+  const normalized = (1 - Math.sqrt(distance) / 100 - 0.2) / 0.6;
+  return Math.round(100 * Math.max(Math.min(normalized, 1), 0)) / 100;
 }
