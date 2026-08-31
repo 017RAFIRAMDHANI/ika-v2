@@ -22,7 +22,7 @@ const stepLabels: Record<FaceChallengeStep, string> = {
 };
 
 const modelConfig: Partial<Config> = {
-  backend: "wasm",
+  backend: "webgl",
   modelBasePath: "/models/human/",
   // Model wajah disimpan bersama aplikasi. Hindari model lama/rusak dari
   // IndexedDB browser, karena GraphModel tanpa executor akan gagal saat
@@ -32,7 +32,7 @@ const modelConfig: Partial<Config> = {
   async: false,
   warmup: "none",
   cacheSensitivity: 0,
-  filter: { enabled: true, equalization: false, flip: false },
+  filter: { enabled: true, equalization: true, flip: false },
   face: {
     enabled: true,
     detector: {
