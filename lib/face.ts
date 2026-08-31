@@ -20,7 +20,7 @@ import {
 const FACE_DESCRIPTOR_LENGTH = 1024;
 const CHALLENGE_AGE_MS = 2 * 60 * 1000;
 const MIN_LIVENESS_SCORE = 0.5;
-export const FACE_MATCH_THRESHOLD = 0.55;
+export const FACE_MATCH_THRESHOLD = 0.40;
 
 type ChallengePayload = {
   mode: FaceChallengeMode;

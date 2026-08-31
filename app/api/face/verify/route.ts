@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     const referenceDescriptor = decryptFaceDescriptor(record.faceTemplateEncrypted);
     const similarity = faceSimilarity(referenceDescriptor, currentDescriptor);
     if (similarity < FACE_MATCH_THRESHOLD) {
-      return jsonError("Wajah tidak cocok dengan data akun. Pastikan akun dan pencahayaan sudah benar.", 401);
+      return jsonError(`Wajah tidak cocok dengan data akun (Skor: ${similarity}). Pastikan pencahayaan dan wajah sudah benar.`, 401);
     }
 
     const saved = await markFaceVerified(session.id);
