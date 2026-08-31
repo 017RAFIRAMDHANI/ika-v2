@@ -185,13 +185,15 @@ export function decryptFaceDescriptor(value: string) {
 
 export function faceSimilarity(first: number[], second: number[]) {
   if (first.length !== second.length || first.length !== FACE_DESCRIPTOR_LENGTH) return 0;
-  let sum = 0;
+  let dotProduct = 0;
+  let normA = 0;
+  let normB = 0;
   for (let index = 0; index < first.length; index += 1) {
-    const difference = first[index] - second[index];
-    sum += difference * difference;
+    dotProduct += first[index] * second[index];
+    normA += first[index] * first[index];
+    normB += second[index] * second[index];
   }
-  const distance = Math.round(100 * 25 * sum) / 100;
-  if (distance === 0) return 1;
-  const normalized = (1 - Math.sqrt(distance) / 100 - 0.2) / 0.6;
-  return Math.round(100 * Math.max(Math.min(normalized, 1), 0)) / 100;
+  if (normA === 0 || normB === 0) return 0;
+  const similarity = dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+  return Math.round(100 * Math.max(similarity, 0)) / 100;
 }
